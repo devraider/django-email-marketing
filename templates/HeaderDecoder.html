@@ -1,0 +1,39 @@
+{% extends 'dashboard.html' %}
+
+
+{% block content %}
+
+  <form class="col-md-4 center" id="post-headers" method="POST">
+    <button class="btn btn-primary btn-lg" id="button" type="submit" >Decode</button>
+    <br><br>
+    {% csrf_token %}
+    <textarea class="col-md-10 center"  id="headers" rows="30" cols="30" placeholder="Put encoded HEADERS here"></textarea>
+
+  </form>
+
+  <textarea class="col-md-4 center" style="margin: 65px 0 0 0;" id="list-headers-decoded" rows="30" cols="10" placeholder="Here will be your headers.."></textarea>
+
+  <script type="text/javascript">
+    $(document).on('submit', '#post-headers', function(e){
+      e.preventDefault();
+      $("#button").replaceWith('<button class="btn btn-primary btn-lg" id="button" type="submit" ><i class="fa fa-refresh fa-spin"></i> Loading...</button>')
+      $.ajax({
+        type:'POST',
+        url: '/HeaderDecoderGenerator',
+        data: {
+          headers_list: $('#headers').val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function(data){
+          $('#list-headers-decoded').html(data);
+          $("#button").replaceWith('<button class="btn btn-primary btn-lg" id="button" type="submit" >Decode</button>');
+
+        }
+      });
+    });
+  </script>
+
+
+
+
+{% endblock %}

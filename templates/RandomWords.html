@@ -1,0 +1,39 @@
+{% extends 'dashboard.html' %}
+
+
+{% block content %}
+
+  <form class="col-md-4 center" id="post-nr-words" method="POST">
+    <button class="btn btn-primary btn-lg" id="button" type="submit" >Generate</button>
+    <br><br>
+    {% csrf_token %}
+    <input type="text" class="form-control" id="words-nr" value="10">
+
+  </form>
+
+  <textarea class="col-md-10 center" style="margin: 65px 0 0 0;" id="list-dns-generated" rows="30" cols="60" placeholder="Here will be your words.."></textarea>
+
+  <script type="text/javascript">
+    $(document).on('submit', '#post-nr-words', function(e){
+      e.preventDefault();
+      $("#button").replaceWith('<button class="btn btn-primary btn-lg" id="button" type="submit" ><i class="fa fa-refresh fa-spin"></i> Loading...</button>')
+      $.ajax({
+        type:'POST',
+        url: '/RandomWordsGenerator',
+        data: {
+          words_nr: $('#words-nr').val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function(data){
+          $('#list-dns-generated').html(data);
+          $("#button").replaceWith('<button class="btn btn-primary btn-lg" id="button" type="submit" >Generate</button>');
+
+        }
+      });
+    });
+  </script>
+
+
+
+
+{% endblock %}

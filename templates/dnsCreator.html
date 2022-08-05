@@ -1,0 +1,55 @@
+{% extends 'dashboard.html' %}
+
+
+{% block content %}
+
+  <form class="col-md-4 center" id="post-list-words" method="POST">
+    <button class="btn btn-primary btn-lg" id="button" type="submit" >Generate</button> <br><br>
+    <label>DNS Lenght: <input type="text" class="form-control" id="dns-lenght" value="10"></label>
+    <label>DNS TLD: <input type="text" class="form-control" id="dns-tld" value="com"></label>
+    <label>DNS number: <input type="text" class="form-control" id="dns-number" value="50"></label>
+    <br><br>
+    {% csrf_token %}
+    <textarea name="words-list" id="words-list" rows="30" cols="60"  placeholder="Paste your words list! If you want to use our words, leave it blank"></textarea>
+
+  </form>
+
+  <textarea style="margin: 202px 0 0 0;" id="list-dns-generated" rows="30" cols="60" placeholder="Here will be your domains..."></textarea>
+
+
+
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    $(document).on('submit', '#post-list-words', function(e){
+      e.preventDefault();
+      $("#button").replaceWith('<button class="btn btn-primary btn-lg" id="button" type="submit" ><i class="fa fa-refresh fa-spin"></i> Loading...</button>')
+      $.ajax({
+        type:'POST',
+        url: '/dnsGenerator',
+        data: {
+          wordslist: $('#words-list').val(),
+          dnslenght: $('#dns-lenght').val(),
+          dnstld: $('#dns-tld').val(),
+          dnsnumber: $('#dns-number').val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function(data){
+          $('#list-dns-generated').html(data);
+          $("#button").replaceWith('<button class="btn btn-primary btn-lg" id="button" type="submit" >Generate</button>');
+
+        }
+      });
+    });
+  </script>
+
+
+
+
+{% endblock %}
