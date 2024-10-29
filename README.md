@@ -1,4 +1,4 @@
-# Tool_For_EmaiMarketing
+# Django tool for Email Marketing
 ### Reason
 It's created to optimize my team email marketing work of my team at my first job.
 You have the following options there:
